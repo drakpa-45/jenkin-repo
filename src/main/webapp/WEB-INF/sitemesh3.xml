@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+<sitemesh>
+    <mapping path="/*" decorator="/layout/layout.jsp"/>
+    <mapping path="/notification" decorator="/layout/blank.jsp"/>
+
+    <mapping path="*PopupAjax*" exclue="true"/>
+    <mapping path="/resources/reports/*" exclue="true"/>
+</sitemesh>-->
+<sitemesh>
+    <mapping path="/*" decorator="/layout/EmptyPage.jsp"/>
+    <mapping path="*/loginDashboard*" decorator="/layout/layoutCitizen.jsp"/>
+    <mapping path="*/initiate*" decorator="/layout/emptyLayout.jsp"/>
+    <mapping path="*/appHistory*" decorator="/layout/EmptyPage.jsp"/>
+    <!--<mapping path="/common*" decorator="/layout/adminLayout.jsp"/>-->
+    <mapping path="*/loginMain*" decorator="/layout/adminLayout.jsp"/>
+    <mapping path="/ruralTimber/saveDoc*" decorator="/layout/emptyLayout.jsp"/>
+    <mapping path="/dealing/*" decorator="/layout/layoutMain.jsp"/>
+    <mapping path="/report/*" decorator="/layout/adminLayout.jsp"/>
+    <mapping path="/cfo/*" decorator="/layout/layoutMain.jsp"/>
+    <mapping path="/rangeOfficer/*" decorator="/layout/layoutMain.jsp"/>
+    <mapping path="/fencingAndWood/*" decorator="/layout/layoutMain.jsp"/>
+    <mapping path="/rangeOfficer/statusDetail" decorator="/layout/layoutMain.jsp"/>
+    <mapping path="/rangeWoodAndPole/*" decorator="/layout/layoutMain.jsp"/>
+    <mapping path="*/loadpagetoemptylayout*" decorator="/layout/EmptyPage.jsp"/>
+    <mapping path="*/openAndClaimApplication/*" decorator="/layout/EmptyPage.jsp"/>
+</sitemesh>
