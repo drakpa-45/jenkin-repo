@@ -307,6 +307,7 @@
                                           <th class="text-white" style="width: 2%">Quantity Approved <span class="text-danger"></span></th>
                                           <th class="text-white" style="width: 2%">Unit <span class="text-danger"></span></th>
                                           <th class="text-white" style="width: 3%">Royalty Rate(NU)</th>
+                                          <th class="text-white" style="width: 3%">Marking Fee/Tree (NU)</th>
                                           <th class="text-white" style="width: 3%">Royalty Amount(NU)</th>
                                           <%--<th class="text-white" style="width: 3%">Total Amount(NU)</th>--%>
                                       </tr>
@@ -326,6 +327,7 @@
                                               &nbsp;<span id="errmsg<%=a%>" class="text-danger"></span></td>
                                           <td><input type="hidden" id="unit_<%=a%>" name="timberDetails[<%=a%>].unit" value="<%=product.get(a).getUnit()%>"><%=product.get(a).getUnit()%></td>
                                           <td><input type="hidden" id="rate_<%=a%>" name="timberDetails[<%=a%>].rate" value="<%=product.get(a).getRate()%>"><%=product.get(a).getRate()%></td>
+                                          <td><input type="hidden" id="markingFee_<%=a%>" value="10">10</td>
                                           <td><input type="number" class="form-control" id="net_Royalty_<%=a%>" name="timberDetails[<%=a%>].royalty_Rate" value="0" readonly/></td>
                                          <%-- <td><input type="number" class="form-control" id="total_Royalty_<%=a%>" name="timberDetails[<%=a%>].total_Royalty"  value="0"  readonly/></td>--%>
                                       </tr>
@@ -533,7 +535,9 @@
             if(validateQty(val,a)==true){
                 var allot = $('#allot_Quantity_'+a).val();
                 var rate = $('#rate_'+a).val();
-                var netAmount = allot * rate;
+                var markingFee = $('#markingFee_'+a).val();
+                var additionalAmt = allot * markingFee;
+                var netAmount = (allot * rate) + additionalAmt;
                 $('#net_Royalty_'+a).val(netAmount);
                  net = $('#net_Royalty_'+a).val();
             }

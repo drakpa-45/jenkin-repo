@@ -88,7 +88,7 @@ public class CitizenDetailsOnline {
                         dto.setGenderType("Female");
                     }
                 }
-                String isCFMember = getDetailsFromCF(cid);
+               // String isCFMember = getDetailsFromCF(cid);
 
                 String house_hold = citizendetailsObj.getHouseholdNo();
                 if(house_hold!= null) {
@@ -97,7 +97,7 @@ public class CitizenDetailsOnline {
                         householdingdetailsObj = householddetailsResponse.getHouseholdDetailsResponse().getHouseholdDetail().get(0);
                         dto.setHead_Gung(householdingdetailsObj.getCid());
 
-                      /*  if(dto.getHead_Gung() != null && dto.getHead_Gung().equalsIgnoreCase(dto.getCid_Number())){
+                        if(dto.getHead_Gung() != null && dto.getHead_Gung().equalsIgnoreCase(dto.getCid_Number())){
                             dto.setHoh("YES");
                         }else{
                             dto.setHoh("NO");
@@ -108,20 +108,22 @@ public class CitizenDetailsOnline {
                             dto.setHoh_Cid("FALSE");
                         }else{
                             dto.setHoh_Cid("TRUE");
-                        }*/
+                        }
 
                         if(!cons_type.isEmpty()) {
-                            BigInteger untExit = serviceCommon.checkForValidation(house_hold,cons_type);
-                           /* if(untExit.intValue()>0){
-                                if(cons_type.equalsIgnoreCase("n")){
-                                    dto.setActor_Name("SORRY!. This household number " + house_hold + " has already raised the requisition for New construction of Rural Houses previously. You can apply only after 25 years.");
-                                }else if(cons_type.equalsIgnoreCase("r")){
-                                    dto.setActor_Name("SORRY!. This household number " + house_hold + " has already raised the requisition for renovation of Rural Houses previously. You can apply only after 12 years.");
-                                }else{
-                                    dto.setActor_Name("SORRY!. This household number " + house_hold + " has already raised the requisition for other Constructions previously. You can apply only after 5 years.");
+                            if(cons_type.equalsIgnoreCase("n") || cons_type.equalsIgnoreCase("r") || cons_type.equalsIgnoreCase("o")){
+                                BigInteger untExit = serviceCommon.checkForValidation(house_hold,cons_type);
+                                if(untExit.intValue()>0){
+                                    if(cons_type.equalsIgnoreCase("n")){
+                                        dto.setActor_Name("SORRY!. This household number " + house_hold + " has already raised the requisition for New construction of Rural Houses previously. You can apply only after 25 years.");
+                                    }else if(cons_type.equalsIgnoreCase("r")){
+                                        dto.setActor_Name("SORRY!. This household number " + house_hold + " has already raised the requisition for renovation of Rural Houses previously. You can apply only after 12 years.");
+                                    }else{
+                                        dto.setActor_Name("SORRY!. This household number " + house_hold + " has already raised the requisition for other Constructions previously. You can apply only after 5 years.");
+                                    }
+                                    dto.setJuri_Type_Id(0);
                                 }
-                                dto.setJuri_Type_Id(0);
-                            }*/
+                            }
                             dto.setJuri_Type_Id(1);
                         }
                     }
@@ -169,6 +171,7 @@ public class CitizenDetailsOnline {
 
             DefaultApi cfApi = new DefaultApi(apiClient);
 
+
            /*GetEmployeeDetailByCidResponse employeeDetailsResponse = cfApi.(cid);*/
            /* GetEmployeeDetailByCidOBJ employeeDetailsOBJ=null;
             if (employeeDetailsResponse.getEmployeedetails().getEmployeedetail() != null && !employeeDetailsResponse.getEmployeedetails().getEmployeedetail().isEmpty()) {
@@ -184,6 +187,7 @@ public class CitizenDetailsOnline {
             System.out.println("Could not connect to Community Forest API. Please wait for the connection OR enter the information correctly. " + e);
             // TODO: un-comment when API is using.
         }
+
         return isCFMember;
     }
 }

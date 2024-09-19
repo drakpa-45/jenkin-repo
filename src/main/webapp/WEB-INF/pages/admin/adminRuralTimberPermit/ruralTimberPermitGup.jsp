@@ -222,7 +222,7 @@
                                 </div>
                                 <%if(App_Details.getCons_Type().equalsIgnoreCase("Other Rural Constructions")){%>
                                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label class="form-label">To Range Office</label>
+                                    <label class="form-label">To Range Office <span class="text-danger">*</span></label>
                                     <select name="allot_Range_Officer" style="width:100%;" class="chosen-select form-control" id="range_id">
                                     <option value="">----- Select------</option>
                                     <c:forEach var="rlist" items="${range_list}" varStatus="counter">
@@ -603,20 +603,42 @@
         $('#gupApprove').on('click',function(){
             var remarks = $('#remarks').val();
             var appNo =$('#applicationNumber').val();
+            var cons_type=$('#ct').val();
             var range_id = $('#range_id').val();
-            $.ajax({
-                type : "POST",
-                url : '${pageContext.request.contextPath}/gewog/gupApprove?remarks=' + remarks + '&appNo='+appNo+'&rangeId='+range_id,
-                data: $('#personalForm').serialize(),
-                cache : false,
-                success : function(res) {
-                    if(res.status==1){
-                        successMsg(res.text, '${pageContext.request.contextPath}/loginMain');
-                    }else{
-                        warningMsg(res.text);
-                    }
+            if(cons_type =='Other Rural Constructions'){
+                if(range_id=='' || range_id ==null){
+                    $('#range_err').html("Select range office");
+                    $('#range_id').focus();
+                }else{
+                    $.ajax({
+                        type : "POST",
+                        url : '${pageContext.request.contextPath}/gewog/gupApprove?remarks=' + remarks + '&appNo='+appNo+'&rangeId='+range_id,
+                        data: $('#personalForm').serialize(),
+                        cache : false,
+                        success : function(res) {
+                            if(res.status==1){
+                                successMsg(res.text, '${pageContext.request.contextPath}/loginMain');
+                            }else{
+                                warningMsg(res.text);
+                            }
+                        }
+                    });
                 }
-            });
+            }else{
+                $.ajax({
+                    type : "POST",
+                    url : '${pageContext.request.contextPath}/gewog/gupApprove?remarks=' + remarks + '&appNo='+appNo+'&rangeId='+range_id,
+                    data: $('#personalForm').serialize(),
+                    cache : false,
+                    success : function(res) {
+                        if(res.status==1){
+                            successMsg(res.text, '${pageContext.request.contextPath}/loginMain');
+                        }else{
+                            warningMsg(res.text);
+                        }
+                    }
+                });
+            }
         });
 
         function updateReject(val) {

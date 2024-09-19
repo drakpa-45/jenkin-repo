@@ -7,9 +7,32 @@
 <body>
 <%--<jsp:include page="/WEB-INF/pages/protocol/common/rpIFrame.jsp"/>--%>
 <%--<%UserSessionDetailDTO userSessionDetailDTO =(UserSessionDetailDTO)request.getSession().getAttribute(SSOClientConstants.SSO_SESSION_OBJ_KEY);%>--%>
+<%
+    System.out.println("############################ INSIDE THE LAYOUT %%%%%%%%%%%");
+    String userName = "";
+    String cid = "";
+    if (session.getAttribute("userdetail") != null) {
+        UserRolePrivilegeDTO userBean = (UserRolePrivilegeDTO) request.getSession().getAttribute("userdetail");
+        String LocationId = "";
+        userName = userBean.getFullName();
+        cid = userBean.getCid();
+        System.out.println("=== current user is : " + userName);
+    }
+%>
+<%--<%if(cid.equalsIgnoreCase("") || cid.equalsIgnoreCase("null")){%>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
+<div class="container">
+    <div class="alert alert-danger alert-dismissible">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        <strong>Session Time Out!</strong> Login via NDI App to avail Rural Timber Service. <a href="http://brtp.citizenservices.gov.bt/">Click Here</a>
+    </div>
+</div>
+<%}else{%>--%>
 <jsp:include page="inc/headerCitizen.jsp"></jsp:include>
-<jsp:include page="/WEB-INF/pages/common/rpIFrame.jsp"/>
+
 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:20px;"id="mainLayout">
 
             <section class="content">
@@ -335,6 +358,6 @@
         <%--<sitemesh:write property='body'/>--%>
 </div>
 <jsp:include page="inc/footer.jsp"></jsp:include>
-
+<%--<%}%>--%>
 </body>
 </html>

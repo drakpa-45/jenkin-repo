@@ -74,46 +74,4 @@ public class APIService {
         tokenRepository.save(token);
         return token;
     }
-
-   /* public JsonNode getSsoToken(HttpServletRequest request, HttpServletResponse response) {
-        ResourceBundle resourceBundle = ResourceBundle.getBundle("wsEndPointURL_en_US");
-        String consumerKey = resourceBundle.getString("CONSUMER.KEY");
-        String consumerSecret = resourceBundle.getString("CONSUMER.SECRET");
-        String dittSsoBaseUri = resourceBundle.getString("ditt.sso.base.uri");
-        String tokenEndPoint = resourceBundle.getString("ditt.sso.token.endpoint");
-        String redirectUri = resourceBundle.getString("dofps.login.redirect_uri");
-
-        String _baseCode = Base64.getEncoder().encodeToString((consumerKey + ":" + consumerSecret).getBytes());
-
-        RestTemplate restTemplate = new RestTemplate();
-
-        restTemplate.getMessageConverters().add(new FormHttpMessageConverter());
-
-        String userAgent = request.getHeader("User-Agent");
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("User-Agent", userAgent);
-        headers.setContentType(org.springframework.http.MediaType.APPLICATION_FORM_URLENCODED);
-        headers.add("Authorization", "Basic " + _baseCode);
-
-        String access_token_url = dittSsoBaseUri.concat(tokenEndPoint);
-
-        MultiValueMap<String, String> form = new LinkedMultiValueMap<>();
-        form.add("grant_type", "authorization_code");
-        form.add("code", request.getParameter("code").trim());
-        form.add("redirect_uri", redirectUri);
-        form.add("scope", "openid");
-
-        HttpEntity<MultiValueMap<String, String>> httpEntity = new HttpEntity<>(form, headers);
-
-        try {
-            ResponseEntity<JsonNode> apiResponse = restTemplate.exchange(access_token_url, HttpMethod.POST, httpEntity, JsonNode.class);
-            System.out.println("################## apiResponse #############3"+apiResponse.getBody());
-            return apiResponse.getBody();
-        } catch (HttpStatusCodeException e) {
-            // Handle exceptions as needed
-            e.printStackTrace();
-            return null;
-        }
-    }*/
 }

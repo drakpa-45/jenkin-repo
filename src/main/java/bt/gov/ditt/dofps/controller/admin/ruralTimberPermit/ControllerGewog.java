@@ -6,6 +6,7 @@ import bt.gov.ditt.dofps.entitiy.InspectionTeamEntity;
 import bt.gov.ditt.dofps.entitiy.PastRecordDetailEntity;
 import bt.gov.ditt.dofps.services.IServiceCitizen;
 import bt.gov.ditt.dofps.services.IServiceCommon;
+import bt.gov.ditt.dofps.services.IServiceWoodPole;
 import bt.gov.ditt.dofps.services.iServiceRuralTimber;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -31,6 +32,9 @@ public class ControllerGewog {
 
     @Autowired
     IServiceCitizen serviceCitizen;
+
+    @Autowired
+    IServiceWoodPole serviceWoodPole;
 
     @Autowired
     iServiceRuralTimber serviceRuralTimber;
@@ -81,6 +85,58 @@ public class ControllerGewog {
         return responseMessage;
     }
 
+    @RequestMapping(value = "/loginMain/privateLandPermit", method = RequestMethod.GET)
+    public String privateLandPermit(ModelMap model,NewTimberDto dto,HttpServletRequest request) {
+        // model.addAttribute("message");
+        model.addAttribute("cons_type");
+        Integer dzo_Id = serviceRuralTimber.getDzoId(request, dto);
+        model.addAttribute("Park_List", serviceRuralTimber.getParkList(request, dzo_Id));
+        model.addAttribute("DZONGKHAG_LIST", serviceRuralTimber.getDzongkhagList());
+        model.addAttribute("Forest_Produce", serviceCommon.getForestProduce());
+        return "admin/permitFromPrivateLandAdmin";
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/loginMain/submitPrivateLand",method = RequestMethod.POST)
+    public String submitPrivateLand(OnlineTimberDTO timberDto, NewTimberDto newTimberDto,@RequestParam("files") MultipartFile[] files, ModelMap model, HttpServletRequest request){
+        String retval="";
+        ResponseMessage responseMessage = new ResponseMessage();
+        responseMessage = serviceCitizen.submitPrivateLand(timberDto,newTimberDto,files,request);
+        retval = responseMessage.getText();
+        model.addAttribute("acknowledgement_message",responseMessage.getText());
+        return retval;
+    }
+
+    @RequestMapping(value = "/loginMain/firewoodAndFencingPoles", method = RequestMethod.GET)
+    public String firewoodAndFencingPoles(ModelMap model,NewTimberDto dto,HttpServletRequest request,@RequestParam("cons_desc") String cons_desc) {
+        model.addAttribute("cons_type");
+        model.addAttribute("Prod_List", serviceWoodPole.getProductDetails(cons_desc));
+        return "/admin/permitForPoleAndFirewoodAdmin";
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/loginMain/saveWoodandPoles",method = RequestMethod.POST)
+    public ResponseMessage saveWoodandPoles(OnlineTimberDTO timberDto, ModelMap model, HttpServletRequest request){
+        String msg="";
+        ResponseMessage responseMessage = new ResponseMessage();
+        try {
+            OnlineTimberDTO insertApplication = serviceCitizen.saveWoodandPoles(timberDto,request);
+            if (insertApplication.getStatus().equalsIgnoreCase("Success")) {
+                responseMessage.setStatus(1);
+                responseMessage.setText("Your requisition for Rural Timber Permit for Wood & Poles is successfully submitted with application number " + timberDto.getApplication_Number());
+            }else {
+                responseMessage.setStatus(0);
+                responseMessage.setText("System encountered with problem(s). Please try again or if the problem persist, contact with Administrator.");
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            responseMessage.setStatus(0);
+            responseMessage.setText("System encountered with problem(s). Please try again or if the problem persist, contact with Administrator.");
+        }
+        // return "/common/ackPage";
+        return responseMessage;
+    }
+
     @RequestMapping(value = "/loginMain/manualRecord", method = RequestMethod.GET)
     public String manualRecord(ModelMap model,HttpServletRequest request) {
         List<CommonDto> fpProductCategory = serviceRuralTimber.getProductList();
@@ -117,6 +173,42 @@ public class ControllerGewog {
         return "/admin/permit_extensionAdmin";
     }
 
+    @RequestMapping(value = "/loginMain/timberReplacement", method = RequestMethod.GET)
+    public String timberReplacement(ModelMap model,HttpServletRequest request) {
+        return "/admin/timber_replacementAdmin";
+    }
+
+
+    @RequestMapping(value = "/loginMain/markingDate", method = RequestMethod.GET)
+    public String markingDate(ModelMap model,HttpServletRequest request) {
+        return "/admin/marking_dateAdmin";
+    }
+
+    @RequestMapping(value = "/loginMain/sowingPermit", method = RequestMethod.GET)
+    public String sowingPermit(ModelMap model,HttpServletRequest request) {
+        return "/admin/sowing_permitAdmin";
+    }
+
+    @RequestMapping(value = "/loginMain/allotmentOrder", method = RequestMethod.GET)
+    public String allotmentOrder(ModelMap model,HttpServletRequest request) {
+        return "/admin/allotmentOrderAdmin";
+    }
+
+    @RequestMapping(value = "/loginMain/permit", method = RequestMethod.GET)
+    public String permit(ModelMap model,HttpServletRequest request) {
+        return "/admin/permitAdmin";
+    }
+
+    @RequestMapping(value = "/loginMain/printSowingPermit", method = RequestMethod.GET)
+    public String printSowingPermit(ModelMap model,HttpServletRequest request) {
+        return "/admin/sowingPermitAdmin";
+    }
+
+    @RequestMapping(value = "/loginMain/forestProduceClearance", method = RequestMethod.GET)
+    public String forestProduceClearance(ModelMap model,HttpServletRequest request) {
+        return "/admin/forestProduceClearanceAdmin";
+    }
+
     @ResponseBody
     @RequestMapping(value = "/loginMain/submitTimberPE", method = RequestMethod.POST)
     public String submitTimberPE(HttpServletRequest request,WorkFlowDto dto,@RequestParam("files") MultipartFile[] files){
@@ -132,11 +224,6 @@ public class ControllerGewog {
             System.out.println("--Exception here-- "+ e);
         }
         return retval;
-    }
-
-    @RequestMapping(value = "/loginMain/timberReplacement", method = RequestMethod.GET)
-    public String timberReplacement(ModelMap model,HttpServletRequest request) {
-        return "/admin/timber_replacementAdmin";
     }
 
     @ResponseBody

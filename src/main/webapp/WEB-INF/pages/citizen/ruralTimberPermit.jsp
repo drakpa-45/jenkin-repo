@@ -219,7 +219,7 @@
                                         </div>
                                         </br>
                                         <div id="row">
-                                            <span class="btn btn-md text-white float-right" id="add_more" style="display: none; background: #FF994E"><i class="fas fa-plus-circle fa-sm">&nbsp;&nbsp; Add More</i> </span>
+                                            <%--<span class="btn btn-md text-white float-right" id="add_more" style="display: none; background: #FF994E"><i class="fas fa-plus-circle fa-sm">&nbsp;&nbsp; Add More</i> </span>--%>
                                             <div class="form-group row mb-2" id="otherDetails" style="display: none;">
                                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 form-control-sm">
                                                     <label class="form-label">Product Category:</label>
@@ -285,10 +285,10 @@
                                                     <label class="form-label">Request Quantity:</label>
                                                     <input type="number" class="form-control form-control-sm" value="0"  name="timberDetails[1].appl_Quantity" id="quantity_app1l" min="1" onchange="checkQuantity1()">
                                                 </div>
-                                                <div class="col-lg-1 col-md-1 col-sm-1">
+                                               <%-- <div class="col-lg-1 col-md-1 col-sm-1">
                                                     <label class="mt-5"></label>
                                                     <button class="btn btn-danger btn-md" type="button" onclick="deleteCurrentRow()"><i class="zmdi zmdi-delete"></i></button>
-                                                </div>
+                                                </div>--%>
                                             </div>
                                         </div>
                                         <div class="form-group row mb-2" id="timberDetails" style="display: none;">
@@ -408,7 +408,7 @@
                 if($('#o').is(':checked')) {
                     $("#productCategoryDetails").hide();
                     $('#otherDetails').show();
-                    $('#add_more').show();
+                   // $('#add_more').show();
                 }
             }
         } else if (val == "timber") {
@@ -943,7 +943,7 @@
                 $("#timberDetails").hide();
                 $("#productCategoryDetails").hide();
                 $('#otherDetails').show();
-                $('#add_more').show();
+               // $('#add_more').show();
             }
     });
 

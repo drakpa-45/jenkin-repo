@@ -197,7 +197,7 @@ public class ControllerCommon {
                             if(workFlowDto.getPayment_status().equalsIgnoreCase("Unpaid") && allot_qty.equals("0")){
                                 pageToReturn = "admin/adminRuralTimberPermit/ruralTimberPermitOcRO";
                             }else{
-                                pageToReturn = "admin/adminRuralTimberPermit/ruralTimberPermitRO";
+                                pageToReturn = "admin/adminRuralTimberPermit/ruralTimberPermitROPayment";
                             }
                         }else{
                             pageToReturn = "admin/adminRuralTimberPermit/ruralTimberPermitRO";

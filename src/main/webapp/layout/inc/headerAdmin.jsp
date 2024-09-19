@@ -77,25 +77,25 @@
                                     </ul>
                                 </li>
                                 <li class="@@boxedactive"><a href="${pageContext.request.contextPath}/gewog/loginMain/citizenDashboard?cons=r"><i class="zmdi zmdi-caret-right"></i> &nbsp; Renovation</a></li>
-                                <li class="@@hiddensidebarboxedactive"><a href="${pageContext.request.contextPath}//gewog/loginMain/citizenDashboard?cons=o"><i class="zmdi zmdi-caret-right"></i> &nbsp; Other Construction</a></li>
-                                <li class="@@hiddensidebarboxedactive"><a href="${pageContext.request.contextPath}/public/initiate/privateLandPermit"><i class="zmdi zmdi-caret-right"></i> &nbsp; Removal of Forest Produce From Registered Land</a></li>
-                                <li class="@@hiddensidebarboxedactive"><a href="${pageContext.request.contextPath}/public/initiate/firewoodAndFencingPoles?cons_desc=WP"><i class="zmdi zmdi-caret-right"></i> &nbsp; Firewood,Fencing Posts & Flag Poles</a></li>
+                                <li class="@@hiddensidebarboxedactive"><a href="${pageContext.request.contextPath}/gewog/loginMain/citizenDashboard?cons=o"><i class="zmdi zmdi-caret-right"></i> &nbsp; Other Construction</a></li>
+                                <li class="@@hiddensidebarboxedactive"><a href="${pageContext.request.contextPath}/gewog/loginMain/privateLandPermit"><i class="zmdi zmdi-caret-right"></i> &nbsp; Removal of Forest Produce From Registered Land</a></li>
+                                <li class="@@hiddensidebarboxedactive"><a href="${pageContext.request.contextPath}/gewog/loginMain/firewoodAndFencingPoles?cons_desc=WP"><i class="zmdi zmdi-caret-right"></i> &nbsp; Firewood,Fencing Posts & Flag Poles</a></li>
                              </ul>
                         </li>
                     <li class="navigation__active"><a href="${pageContext.request.contextPath}/gewog/loginMain/timberReplacement"><i class="zmdi zmdi-device-hub"></i> &nbsp; Timber Replacement</a></li>
                     <li class="navigation__sub @@tableactive">
                         <a href="#"><i class="zmdi zmdi-plus-circle-o"></i> &nbsp; Scheduling Services <i class="ml-2 zmdi zmdi-caret-down"></i></a>
                         <ul>
-                            <li class="@@normaltableactive"><a href="${pageContext.request.contextPath}/public/initiate/markingDate"><i class="zmdi zmdi-caret-right"></i> &nbsp; Marking Date</a></li>
-                            <li class="@@datatableactive"><a href="${pageContext.request.contextPath}/public/initiate/sowingPermit"><i class="zmdi zmdi-caret-right"></i> &nbsp; Sawing Permit</a></li>
+                            <li class="@@normaltableactive"><a href="${pageContext.request.contextPath}/gewog/loginMain/markingDate"><i class="zmdi zmdi-caret-right"></i> &nbsp; Marking Date</a></li>
+                            <li class="@@datatableactive"><a href="${pageContext.request.contextPath}/gewog/loginMain/sowingPermit"><i class="zmdi zmdi-caret-right"></i> &nbsp; Sawing Permit</a></li>
                         </ul>
                     </li>
                 <li class="navigation__sub @@tableactive">
                     <a href="#"><i class="zmdi zmdi-plus-circle-o"></i> &nbsp; Certifications<i class="ml-2 zmdi zmdi-caret-down"></i></a>
                     <ul>
-                        <li class="@@normaltableactive"><a href="${pageContext.request.contextPath}/public/initiate/allotmentOrder"><i class="zmdi zmdi-caret-right"></i> &nbsp; Allotment Order</a></li>
-                        <li class="@@datatableactive"><a href="${pageContext.request.contextPath}/public/initiate/permit"><i class="zmdi zmdi-caret-right"></i> &nbsp; Permit</a></li>
-                        <li class="@@datatableactive"><a href="${pageContext.request.contextPath}/public/initiate/printSowingPermit"><i class="zmdi zmdi-caret-right"></i> &nbsp; Sawing Permit</a></li>
+                        <li class="@@normaltableactive"><a href="${pageContext.request.contextPath}/gewog/loginMain/allotmentOrder"><i class="zmdi zmdi-caret-right"></i> &nbsp; Allotment Order</a></li>
+                        <li class="@@datatableactive"><a href="${pageContext.request.contextPath}/gewog/loginMain/permit"><i class="zmdi zmdi-caret-right"></i> &nbsp; Permit</a></li>
+                        <li class="@@datatableactive"><a href="${pageContext.request.contextPath}/gewog/loginMain/printSowingPermit"><i class="zmdi zmdi-caret-right"></i> &nbsp; Sawing Permit</a></li>
                     </ul>
                 </li>
                 <li class="navigation__active"><a href="${pageContext.request.contextPath}/gewog/loginMain/updateConstructionCompletion"><i class="zmdi zmdi-steam"></i> &nbsp; Update Construction</a></li>

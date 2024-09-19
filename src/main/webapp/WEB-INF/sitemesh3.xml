@@ -8,8 +8,10 @@
     <mapping path="/resources/reports/*" exclue="true"/>
 </sitemesh>-->
 <sitemesh>
-    <mapping path="/*" decorator="/layout/EmptyPage.jsp"/>
+    <mapping path="/*" decorator="/layout/layoutCitizen.jsp"/>
     <mapping path="*/loginDashboard*" decorator="/layout/layoutCitizen.jsp"/>
+    <mapping path="*/ssoLandingPage*" decorator="/layout/layoutCitizen.jsp"/>
+    <mapping path="*/ndiLandingPage.html*" decorator="/layout/layoutCitizen.jsp"/>
     <mapping path="*/initiate*" decorator="/layout/emptyLayout.jsp"/>
     <mapping path="*/appHistory*" decorator="/layout/EmptyPage.jsp"/>
     <!--<mapping path="/common*" decorator="/layout/adminLayout.jsp"/>-->

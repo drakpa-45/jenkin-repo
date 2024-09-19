@@ -22,8 +22,6 @@ public class Token {
     @Column
     private long created_on;
 
-    private String id_token;
-
     public long getCreated_on() {
         return created_on;
     }
@@ -61,13 +59,5 @@ public class Token {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public String getId_token() {
-        return id_token;
-    }
-
-    public void setId_token(String id_token) {
-        this.id_token = id_token;
     }
 }

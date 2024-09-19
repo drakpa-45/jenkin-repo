@@ -16,9 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 import java.awt.*;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
@@ -49,7 +47,7 @@ public class ServiceNDI implements IServiceNDI{
         HttpSession session = request.getSession();
         RestTemplate template = new RestTemplate();
 
-        /*String requestJson = "{\n" +
+     /*   String requestJson = "{\n" +
                 "  \"proofName\": \"verifyUser\",\n" +
                 "  \"proofAttributes\": [\n" +
                 "    {\n" +
@@ -73,6 +71,7 @@ public class ServiceNDI implements IServiceNDI{
                 "  \"threadId\": \"\"\n" +
                 "}";*/
 
+/*
         String requestJson = "{\n" +
                 "  \"proofName\": \"verifyUser\",\n" +
                 "  \"proofAttributes\": [\n" +
@@ -89,10 +88,11 @@ public class ServiceNDI implements IServiceNDI{
                 "  ],\n" +
                 "  \"forRealtionship\": \"\"\n" +
                 "}";
+*/
 
         String authCredentials="{\n" +
-                "\"client_id\": \"3tq7ho23g5risndd90a76jre5f\",\n" +
-                "\"client_secret\":\"111rvn964mucumr6c3qq3n2poilvq5v92bkjh58p121nmoverquh\",\n" +
+                "\"client_id\": \"4sfp321ffih5ujf3bmukaseboo\",\n" +
+                "\"client_secret\":\"1jnpmc2961f2lum5d4ejlbkvqo9d4376j64htr194i6n0obg128e\",\n" +
                 "\"grant_type\": \"client_credentials\"\n }";
 
         HttpHeaders authenticationHeader = new HttpHeaders();
@@ -108,16 +108,40 @@ public class ServiceNDI implements IServiceNDI{
         JSONObject object = new JSONObject(authResponse.getBody());
         String token = object.getString("access_token");
 
+        System.out.println("################ token ############"+token);
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.set("Authorization", "Bearer "+ token);
 
+        String requestJson = "{\n" +
+                "  \"proofName\": \"verifyUser\",\n" +
+                "  \"proofAttributes\": [\n" +
+                "    {\n" +
+                "      \"name\": \"Full Name\",\n" +
+                "      \"restrictions\": [\n" +
+                "        {\n" +
+                "          \"cred_def_id\": \"KqRp5pz9HoFho42Wkvt9XQ:3:CL:613:revocable\"\n" +
+                "        }\n" +
+                "      ]\n" +
+                "    },\n" +
+                "    {\n" +
+                "      \"name\": \"ID Number\",\n" +
+                "      \"restrictions\": [\n" +
+                "        {\n" +
+                "          \"cred_def_id\": \"KqRp5pz9HoFho42Wkvt9XQ:3:CL:613:revocable\"\n" +
+                "        }\n" +
+                "       ]\n" +
+                "    }\n" +
+                "  ],\n" +
+                "  \"forRealtionship\": \"\"\n" +
+                "}";
+
         ResourceBundle resourceBundle1 = ResourceBundle.getBundle("wsEndPointURL_en_US");
-        String url =resourceBundle1.getString("getVerifyProofRequest.endPointProofRequestURL");
+        String getVerifyProofRequest =resourceBundle1.getString("getVerifyProofRequest.endPointProofRequestURL");
 
         HttpEntity<String> requestEntity = new HttpEntity<>(requestJson,headers);
-        ResponseEntity<String> response = template.exchange(url, HttpMethod.POST, requestEntity, String.class);
+        ResponseEntity<String> response = template.exchange(getVerifyProofRequest, HttpMethod.POST, requestEntity, String.class);
 
         System.out.println(response.getBody());
 //       ObjectMapper objectMapper = new ObjectMapper();
@@ -136,7 +160,7 @@ public class ServiceNDI implements IServiceNDI{
         ndiDTO.setProofRequestThreadId(proofRequestThreadId);
         getProofRequestStatus(proofRequestThreadId,request,responses,token); //listen to nats
 //        getRelationshipReused(threadId);
-return ndiDTO;
+        return ndiDTO;
     }
 
     @Override
@@ -151,18 +175,20 @@ return ndiDTO;
 
     }
 
+
     private String getProofRequestStatus(String threadId, HttpServletRequest request,HttpServletResponse responses,String token) throws IOException, InterruptedException {
         AtomicReference<String> returnMessage = new AtomicReference<>("");
         HttpSession session = request.getSession();
         // String natsURL = "nats://18.142.249.134:4222";
 
         ResourceBundle resourceBundle1 = ResourceBundle.getBundle("wsEndPointURL_en_US");
+        //        byte[] seed = seedString.getBytes();
         String natsURL =resourceBundle1.getString("getNats.endPointNATSURL");
 
-        String seedString = "SUAPXY7TJFUFE3IX3OEMSLE3JFZJ3FZZRSRSOGSG2ANDIFN77O2MIBHWUM";
+        String seedString = "SUAOCNCDWVZGDKIT63PAJVGCK5O6GMBMEJG3S52LZZILDNP4LTVPNN5FPE";
 
         char[] seed = seedString.toCharArray();
-//        byte[] seed = seedString.getBytes();
+
         NKey nKey = NKey.fromSeed(seed);
         String[] array = new String[]{natsURL};
         Options opts = new Options.Builder().servers(array).maxReconnects(-1).
@@ -194,9 +220,9 @@ return ndiDTO;
 
         Connection connect = Nats.connect(opts);
 
-        array = new String[]{natsURL};
-        opts = new Options.Builder().servers(array).maxReconnects(-1).build();
-        connect = Nats.connect(opts);
+     /*   String[] array = new String[]{natsURL};
+        Options opts = new Options.Builder().servers(array).maxReconnects(-1).build();
+        Connection connect = Nats.connect(opts);*/
         Date expirationDate = null;
         if(connect.getStatus().toString().equalsIgnoreCase("CONNECTED")){
             // Set the expiration time
@@ -212,8 +238,8 @@ return ndiDTO;
 
         if(session.getAttribute("userdetail") !=null) {
             //redirect do system URL
-            String redirectUrl = "http://localhost:8083/dofps/loginDashboard";
-           // String redirectUrl = "http://brtp.citizenservices.gov.bt/loginDashboard";
+            String redirectUrl = "http://localhost:8083/dofps/ssoLandingPage";
+            // String redirectUrl = "http://brtp.citizenservices.gov.bt/loginDashboard";
             try {
                 Desktop.getDesktop().browse(new URI(redirectUrl));
             } catch (IOException e) {
@@ -233,7 +259,7 @@ return ndiDTO;
 
                 String fullName = revealedAttr.getJSONObject("Full Name").getString("value");
                 String IDNumber = revealedAttr.getJSONObject("ID Number").getString("value");
-              //  String mobileNumber = selfAttested.get("Mobile Number").toString();
+                //  String mobileNumber = selfAttested.get("Mobile Number").toString();
 
 //            JSONObject data = obj.getJSONObject("data");
 //            String status = data.getString("status");
@@ -266,26 +292,13 @@ return ndiDTO;
                         //dto.setMobileNo(mobileNumber);
                         session.setAttribute("userdetail", dto);
                         //redirect do system URL
-                        String redirectUrl = "http://localhost:8083/dofps/loginDashboard";
-                       // String redirectUrl = "http://brtp.citizenservices.gov.bt/loginDashboard";
-                        sendEvent("exists", threadId, "email");
+                        String redirectUrl = "http://localhost:8083/dofps/ssoLandingPage";
+                       // sendEvent("exists", threadId, "email");
+
                         if (Desktop.isDesktopSupported()) {
-                            openURLUsingDesktop(redirectUrl);
+                           openURLUsingDesktop(redirectUrl);
                         } else {
                             openURLFallback(redirectUrl);
-                        }
-                    }else{
-                        //redirect do system URL
-                        String redirectUrl = "http://localhost:8083/dofps/";
-                       //String redirectUrl = "http://brtp.citizenservices.gov.bt";
-                        sendEvent("exists", threadId, "email");
-                        try {
-                            Desktop.getDesktop().browse(new URI(redirectUrl));
-                            finalDispatcher.unsubscribe(threadId);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        } catch (URISyntaxException e) {
-                            e.printStackTrace();
                         }
                     }
                 }
@@ -294,8 +307,7 @@ return ndiDTO;
         dispatcher.subscribe(threadId);
         return returnMessage.toString();
     }
-
-    private static void openURLUsingDesktop(String url) {
+    public static void openURLUsingDesktop(String url) {
         try {
             Desktop.getDesktop().browse(new URI(url));
         } catch (IOException | URISyntaxException e) {
@@ -303,39 +315,34 @@ return ndiDTO;
         }
     }
 
-    private static void openURLFallback(String url) {
-        String os = System.getProperty("os.name").toLowerCase();
+    private static String openURLFallback(String redirectUrl) {
+        return "common/blank";
+       /* String os = System.getProperty("os.name").toLowerCase();
         Runtime rt = Runtime.getRuntime();
         System.out.println("================= inside openURLFallback ========="+ os);
+        System.out.println("=================  redirectUrl ========="+ redirectUrl);
         try {
             if (os.contains("win")) {
                 // Windows
                 System.out.println("================= inside openURLFallback ========="+ os.contains("win") + " window");
-                rt.exec("rundll32 url.dll,FileProtocolHandler " + url);
+                rt.exec("rundll32 url.dll,FileProtocolHandler " + redirectUrl);
             } else if (os.contains("mac")) {
                 // macOS
                 System.out.println("================= inside openURLFallback ========="+ os.contains("win") + " macOS");
-                rt.exec("open " + url);
+                rt.exec("open " + redirectUrl);
             } else if (os.contains("nix") || os.contains("nux") || os.contains("aix")) {
                 // Linux/Unix
-                System.out.println("================= inside openURLFallback ========="+ os.contains("win") + " Linux/Unix");
-               // String[] browsers = {"xdg-open", "google-chrome", "firefox", "mozilla", "konqueror", "epiphany", "netscape"};
-                String[] browsers = {"xdg-open", "google-chrome", "firefox"};
+                System.out.println("================= inside openURLFallback =========" + os.contains("win") + " Linux/Unix");
+
+                String[] browsers = {"google-chrome", "firefox", "epiphany"};
                 boolean found = false;
                 for (String browser : browsers) {
-                   /* System.out.println("================= inside openURLFallback browser========="+ browser);
-                    if (!found) {
-                        System.out.println("================= inside openURLFallback !found ========="+ found);
-                        found = rt.exec(new String[]{"which", browser}).waitFor() == 0;
-                       // if (found) {
-                            System.out.println("================= inside openURLFallback found ========="+ found);
-                            rt.exec(new String[]{browser, url});
-                       // rt.exec(new String[]{"/usr/bin/xdg-open", url});
-                       // }
-                    }*/
-                    ProcessBuilder processBuilder = new ProcessBuilder(browser, url);
+                    System.out.println("================= inside openURLFallback browser========="+ browser);
+
+                    ProcessBuilder processBuilder = new ProcessBuilder(browser, redirectUrl);
                     System.out.println("============= processBuilder============ " + processBuilder);
                     Process process = processBuilder.start();
+                    Desktop.getDesktop().browse(new URI(redirectUrl));
                     // Read and print the process output (including errors).
                     try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
                         String line;
@@ -358,10 +365,15 @@ return ndiDTO;
             } else {
                 System.out.println("Fallback mechanism not available for the current operating system.");
             }
-        } catch (IOException | InterruptedException e) {
+        } catch (IOException e) {
             e.printStackTrace(); // Handle or log any exceptions that occur while opening the URL.
             System.out.println("================== InterruptedException ================== " +e);
-        }
+            System.out.println("#################### desktop not supported ###################");
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }*/
     }
 
     public void sendEvent(String value, String pThId, String relationDID) {
@@ -376,6 +388,6 @@ return ndiDTO;
         } catch (IOException e) {
             emitters.remove(sseEmitter);
             throw new RuntimeException(e);
-            }
         }
+    }
 }

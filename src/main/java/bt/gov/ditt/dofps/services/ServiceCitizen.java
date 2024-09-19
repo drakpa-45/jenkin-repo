@@ -857,7 +857,7 @@ public class ServiceCitizen implements IServiceCitizen {
 
                     TaskDetailEntity taskDetailEntity = new TaskDetailEntity();
                     taskDetailEntity.setApplication_Number(applicationNumber);
-                    int privId=daoCommon.getpriId((int) Service_Id,"Submitter");
+                   // int privId=daoCommon.getpriId((int) Service_Id,"Submitter");
                     //taskDetailEntity.setAssigned_Priv_Id(privId);
                     taskDetailEntity.setAssigned_Priv_Id(1822);
                     taskDetailEntity.setAction_Date(new Date());

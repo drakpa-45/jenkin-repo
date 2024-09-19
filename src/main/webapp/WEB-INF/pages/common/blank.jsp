@@ -1,3 +1,4 @@
+<%@ page import="bt.gov.ditt.dofps.dto.UserRolePrivilegeDTO" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
@@ -75,6 +76,7 @@
     <%--<button class="toggle-button">&#9776;</button>--%>
     <span class="header-text">Toll Free Number:1199 / E-mail:g2c@cabinet.govt.bt</span>
 </header>
+
 <div>
     <img  class="pl-5 mt-3" src="<c:url value="/resources/images/logo.png"/> " alt="">
     <h5>CITIZEN SERVICE PORTAL </h5>
@@ -90,7 +92,7 @@
                     <div class="col-lg-12 col-md-12 col-sm-12" id="socialBx">
                         <h6 style="text-align: center;" class="card-title">Click to Login as citizen to avail the service </h6>
                         <div style="text-align: center;" class="form-group">
-                            <a href="http://brtp.citizenservices.gov.bt/loginDashboard"><button style='background: #ffa500;border-color: #ffa500;' type="submit" class="btn text-white cus-button">Login with SSO </button></a>
+                            <a href="https://brtp.citizenservices.gov.bt/ssoLandingPage"><button style='background: #ffa500;border-color: #ffa500;' type="submit" class="btn text-white cus-button">Login with SSO </button></a>
                             <%--<a href="${authorizeUriUtf8}"><button style='background: #ffa500;border-color: #ffa500;' type="submit" class="btn text-white cus-button">Login with SSO </button></a>--%>
                         </div>
                         <div style="text-align: center;" class="form-group">
@@ -109,7 +111,8 @@
                             <div class="form-group">
                                 <label for="password">Click to Login as executing agency/official </label>
                                 <div style="text-align: center;" class="form-group">
-                                    <a href="http://brtp.citizenservices.gov.bt/loginMain"><button style='background-color: #0ba5d9;border-color:#0ba5d9;' type="submit" class="btn text-white cus-button">Agency Login </button></a>
+                                    <%--<a href="https://brtp.citizenservices.gov.bt/loginMain"><button style='background-color: #0ba5d9;border-color:#0ba5d9;' type="submit" class="btn text-white cus-button">Agency Login </button></a>--%>
+                                    <a href="http://localhost:8082/dofps/loginMain"><button style='background-color: #0ba5d9;border-color:#0ba5d9;' type="submit" class="btn text-white cus-button">Agency Login </button></a>
                                 </div>
                             </div>
                         </div>
@@ -171,23 +174,54 @@
                 var ctx = canvas.getContext("2d");
                 ctx.drawImage(logoImage, 100, 100, 60, 60); // Adjust the positioning and size as needed
 
+               // registerEvent(threadId);
+               startProcessing(res.deepLinkURL,res.proofRequestThreadId);
+            }
+
+        });
+
+    }
+function startProcessing(token,threadId){
+
+    $.ajax({
+        type: 'GET',
+        url: '${pageContext.request.contextPath}/ndi/startProcessing?token='+token +'&threadId='+threadId,
+        success: function(data) {
+            debugger;
+            // Handle the response
+            console.log("|#########response data########"); // Acknowledgement response
+            if(data=="proofValidated"){
+                fetchStatus();
+            }
+        },
+        error: function(error) {
+            console.error('Error:', error);
+            console.log("|#########Error########");
+        }
+    });
+
+}
+    function fetchStatus(){
+        debugger;
+        console.log("|#########inside fetch status########");
+        $.ajax({
+            type: 'GET',
+            url: '${pageContext.request.contextPath}/ndi/status',
+            success: function(status) {
+                // Handle the status data
+                console.log('Status:', status);
+            },
+            error: function(error) {
+                console.error('Error:', error);
             }
         });
 
-
     }
-
-
     // Function to load the image and convert it to binary data
     function loadImageAndEncode(imageUrl) {
 
     }
-
-
-
-
-
-    function registerEvent(threadId) {
+/*  function registerEvent(threadId) {
         let endPoint = '${pageContext.request.contextPath}/subscribe?threadId=' + threadId;
         let eventSource = new EventSource(endPoint);
 
@@ -199,11 +233,20 @@
             $('.counterForScan').addClass("hidden");
         }
     })
+    }*/
+    function registerEvent(threadId) {
+        var endPoint = '${pageContext.request.contextPath}/subscribe?threadId=' + threadId;
+        var eventSource = new EventSource(endPoint);
+
+        eventSource.addEventListener('proofSuccessEvent', function(event) {
+            var data = JSON.parse(event.data);
+            alert(data.status);
+            if (data.status === 'exists') {
+                document.querySelector('.respondReceived').value = 1;
+                document.querySelector('.counterForScan').classList.add("hidden");
+                window.open("https://brtp.citizenservices.gov.bt/ndiLandingPage.html");
+            }
+        });
     }
 
-    function agencyLogin(){
-        var url='http://localhost:8083/dofps/loginMain';
-        alert(url);
-        $('#loadMainPage').load(url);
-    }
 </script>

@@ -81,8 +81,7 @@ public class ControllerDealing {
                     response.getOutputStream().flush();
                     response.getOutputStream().close();
                 }
-            }
-            else{
+            }else{
                 response.setContentType("application/octet-stream");
                 response.setHeader("Content-disposition", "attachment; filename="+doc.getDocument_Name());
                 response.getOutputStream().write(fileContent);
@@ -95,6 +94,7 @@ public class ControllerDealing {
         }
         return null;
     }
+
     public static byte[] downloadFile(String uploadUlr) throws Exception{
         FileInputStream fileInputStream = new FileInputStream(uploadUlr);
         return IOUtils.toByteArray(fileInputStream);

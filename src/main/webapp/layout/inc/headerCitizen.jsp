@@ -23,9 +23,19 @@
     <link href="https://code.jquery.com/ui/1.12.1/themes/ui-lightness/jquery-ui.css" rel="stylesheet"/>
 </head>
 
-<%--<% UserRolePrivilegeDTO user = (UserRolePrivilegeDTO) request.getSession().getAttribute("userdetail");
-    String userName = user.getFullName();%>--%>
-
+<%
+    System.out.println("############################ INSIDE THE LAYOUT %%%%%%%%%%%");
+    String userName = "";
+    String cid = "";
+    if (session.getAttribute("userdetail") != null) {
+        UserRolePrivilegeDTO userBean = (UserRolePrivilegeDTO) request.getSession().getAttribute("userdetail");
+        String LocationId = "";
+        userName = userBean.getFullName();
+        cid = userBean.getCid();
+        System.out.println("=== current user is : " + userName);
+    }
+%>
+<%--<jsp:include page="/WEB-INF/pages/common/rpIFrame.jsp"/>--%>
 <body data-sa-theme="3">
 <main class="main">
     <header class="header">
@@ -54,10 +64,11 @@
                     <a href="#" data-toggle="dropdown"><i class="zmdi zmdi-account-circle" style="font-size:xx-large"></i></a>
                     <div class="dropdown-menu dropdown-menu-right dropdown-menu--block-sm" role="menu">
                         <div class="listview listview--hover">
-                            <a href="#" class="view-more text-white"><i class="zmdi zmdi-account"></i> &nbsp; User </a>
+                            <a href="#" class="view-more text-white"><i class="zmdi zmdi-account"></i> &nbsp; <%=userName%> (<%=cid%>) </a>
                         </div>
                         <div class="listview listview--hover">
-                            <a href="<c:url value="/common/logout"/>" class="view-more text-white"><i class="zmdi zmdi-lock-outline"></i> &nbsp; Logout</a>
+                            <%--<a href="<c:url value="/common/logout"/>" class="view-more text-white"><i class="zmdi zmdi-lock-outline"></i> &nbsp; Logout</a>--%>
+                            <a href="${pageContext.request.contextPath}/logout" class="view-more text-white"><i class="zmdi zmdi-lock-outline"></i> &nbsp; Logout</a>
                         </div>
                     </div>
                 </li>
@@ -109,7 +120,6 @@
         </div>
     </aside>
 </main>
-
 <%--<!-- Vendors -->
 <script type="text/javascript" src="<c:url value="/resources/jquery/jQuery-3.4.1.min.js"/>"></script>
 <script src="<c:url value='/resources/framework/vendors/bower_components/popper.js/dist/umd/popper.min.js' />"></script>

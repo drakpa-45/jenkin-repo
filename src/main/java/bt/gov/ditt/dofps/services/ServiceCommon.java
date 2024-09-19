@@ -398,10 +398,10 @@ public class ServiceCommon implements IServiceCommon{
                     paymentList.add(dto3);
 
                     dto.setPaymentList(paymentList.toArray(new PaymentDTO[paymentList.size()]));
-                    ResourceBundle bundle = ResourceBundle.getBundle("wsEndPointURL_en_US");
+                    /*ResourceBundle bundle = ResourceBundle.getBundle("wsEndPointURL_en_US");
                     InvokePaymentWS invokews = new InvokePaymentWS(bundle.getString("getPayment.endPointURL"));
                     boolean isSaved = invokews.insertPaymentDetailsOnApproval(dto);
-                    System.out.println("Response from Aggregator: "+isSaved);
+                    System.out.println("Response from Aggregator: "+isSaved);*/
                     insertToTaskAudit=daoCommon.updatePaymentStatus(appNo,timberDto);
                     //  }
                 }
@@ -435,6 +435,7 @@ public class ServiceCommon implements IServiceCommon{
             }
         }catch (Exception e){
             e.printStackTrace();
+            responseMessage.setStatus(0);
         }
         return responseMessage;
     }

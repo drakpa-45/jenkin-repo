@@ -1,16 +1,16 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <body>
-<form action="#" id="constructionForm" method="post">
+<form action="#" id="markingForm" method="post">
     <section class="content">
         <div class="content__inner" id="loadMainPage">
             <div class="card">
                 <div class="bg-blue card-status card-status-left"></div>
                 <div class="card-header">
-                    <span class="card-title">Update Construction Completion</span>
+                    <span class="card-title">Schedule Marking Date</span>
                 </div>
                 <div class="card-body">
-                    <div class="row" style="height: 240px">
+                    <div class="row">
                         <div class="col-lg-3 col-md-3 col-sm-12">
                             <label class="form-label">Enter Application Number:</label>
                         </div>
@@ -18,10 +18,10 @@
                             <input type="text" class="form-control" id="applicationNo" placeholder="enter app no">
                         </div>
                         <div class="col-lg-2 col-md-2 col-sm-12">
-                            <button type="button" class="btn text-white" onclick="check4Completion()" style="background-color: #d0802b">Submit</button>
+                            <button type="button" class="btn text-white" onclick="checkForMarking()" style="background-color: #d0802b">Submit</button>
                         </div>
                     </div>
-                    <div class="card mt-4" id="markingScheduleSection" style="display: none;">
+                    <div class="card mt-4" id="markingScheduleSection">
                         <div class="bg-blue card-status card-status-left"></div>
                         <div class="card-header">
                             <span class="card-title">Applicant Details</span>
@@ -44,7 +44,7 @@
                             </div>
                             <div class="form-group row mb-2">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 form-control-sm">
-                                    <label class="form-label">Dzongkhag</label>
+                                    <label class="form-label">Dzongkhag </label>
                                     <input type="text" class="form-control form-control-sm" id="dzongkhag" readonly>
                                 </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 form-control-sm">
@@ -63,24 +63,15 @@
                                     <input type="hidden" class="form-control form-control-sm" id="app_Marking_Schedule_Date" readonly/>
                                 </div>
                                 <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 form-control-sm">
-                                    <label class="font-weight-bold">Completion Date : <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control form-control-sm datepicker" id="completionDate"/>
-                                </div>
-                                <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 form-control-sm">
-                                    <label class="form-label">Completion Status: <span class="text-danger">*</span></label>
-                                    <select class="form-control col-6" name="construction_status" id="construction_status">
-                                        <option value="ALL">ALL</option>
-                                        <c:forEach var="clist" items="${construction_status}" varStatus="counter">
-                                            <option value="${clist.header_id}">${clist.header_Name}</option>
-                                        </c:forEach>
-                                    </select>
+                                    <label class="font-weight-bold">Marking on Date : <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control form-control-sm datepicker" id="markingDate" onchange="checkValidDate(this.value)"/>
                                 </div>
                             </div>
                             <input type="hidden" id="allot_Range_Officer">
                             <div class="form-group text-right">
                                 <div class="col-md-12 col-sm-12-col-lg-12 col-xs-12">
-                                    <a href="#"> <button class="btn btn-md fa-pull-right mr-3 text-white" style="background-color: #F15628" type="button"><i class="zmdi zmdi-close-circle"></i>&nbsp; Cancel</button></a>
-                                    <button class="btn btn-md fa-pull-right text-white" style="background-color: #236F67" id="btn_submit_online_timber" onclick="updateCompletionDate()" type="button">
+                                    <a href="${pageContext.request.contextPath}/public/initiate/timberReplacement"> <button class="btn btn-md fa-pull-right mr-3 text-white" style="background-color: #F15628" type="button"><i class="zmdi zmdi-close-circle"></i>&nbsp; Cancel</button></a>
+                                    <button class="btn btn-md fa-pull-right text-white" style="background-color: #236F67" id="btn_submit_online_timber" disabled onclick="scheduleMarkingDate()" type="button">
                                         <a href="#" class="text-white">Submit&nbsp;&nbsp;&nbsp;<i class="zmdi zmdi-check-circle"></i></a></button>
                                 </div>
                             </div>
@@ -111,17 +102,33 @@
     var mm = today.getMonth() + 1;
     var yyyy = today.getFullYear();
     today = dd + '-' + mm + '-' + yyyy;
-    $( "#completionDate").datepicker({
+    $( "#markingDate").datepicker({
         minDate: today, // Current day
        // maxDate: 10, // 30 days from the current day
         dateFormat: 'dd-mm-yy'
     });
 
-    function check4Completion(){
+    function checkValidDate(thisDate){
+        var allot_Range_Officer = $("#allot_Range_Officer").val();
+        $.ajax({
+            type : "GET",
+            url : '${pageContext.request.contextPath}/public/initiate/isDateAvailable?thisDate='+thisDate+'&allot_Range_Officer='+allot_Range_Officer,
+            cache : false,
+            success : function(res) {
+                if(res.status=='1'){
+                }else{
+                    warningMsg(res.text);
+                    $("#markingDate").val('').focus();
+                }
+            }
+        });
+
+    }
+    function checkForMarking(){
         var appNo = $('#applicationNo').val();
         $.ajax({
             type : "GET",
-            url : '${pageContext.request.contextPath}/gewog/loginMain/check4Completion?appNo='+appNo,
+            url : '${pageContext.request.contextPath}/public/initiate/checkForMarking?appNo='+appNo,
             data: $('form').serialize(),
             cache : false,
             success : function(res) {
@@ -137,30 +144,46 @@
                     $('#allot_Range_Officer').val(dto.allot_Range_Officer);
                     $('#approvedDate').val(dto.app_Approval_Date);
                     $('#app_Marking_Schedule_Date').val(dto.app_Marking_Schedule_Date);
+                    $('#btn_submit_online_timber').prop('disabled',false);
                 }else{
                     warningMsg(res.text);
-                    $("#markingScheduleSection").hide();
+                    $('#btn_submit_online_timber').prop('disabled',true);
+                   // $("#markingScheduleSection").hide();
                 }
             }
         });
     }
 
-    function updateCompletionDate(){
+    function checkReplaceQuantity(i) {
+        var replaceQuantity = $('#quantityToReplace_'+i).val();
+        var maxLimit = $('#allot_Quantity_'+i).val();
+        if(parseInt(replaceQuantity) > parseInt(maxLimit)) {
+            warningMsg("Cannot be more than approved quantity");
+            $('#quantityToReplace_'+i).val("");
+            $('#quantityToReplace_'+i).focus();
+        }
+    }
+
+    function scheduleMarkingDate(){
         var appNo = $('#applicationNo').val();
-        var completionDate = $('#completionDate').val();
-        $.ajax({
-            type : "POST",
-            url : '${pageContext.request.contextPath}/gewog/loginMain/updateCompletionDate?appNo='+appNo+'&completionDate='+completionDate,
-            data: $('#constructionForm').serialize(),
-            cache : false,
-            success : function(res) {
-                if(res.status=='1'){
-                    successMsg(res.text,'${pageContext.request.contextPath}/gewog/loginMain/updateConstructionCompletion');
-                }else{
-                    warningMsg(res.text);
+        var markingDate = $('#markingDate').val();
+        if(markingDate != ""){
+            $.ajax({
+                type : "POST",
+                url : '${pageContext.request.contextPath}/public/initiate/scheduleMarkingDate?appNo='+appNo+'&markingDate='+markingDate,
+                data: $('#markingForm').serialize(),
+                cache : false,
+                success : function(res) {
+                    if(res.status=='1'){
+                        successMsg(res.text,'${pageContext.request.contextPath}/public/initiate/markingDate');
+                    }else{
+                        warningMsg(res.text);
+                    }
                 }
-            }
-        });
+            });
+        }else{
+            warningMsg("Enter marking date")
+        }
     }
 </script>
 </body>

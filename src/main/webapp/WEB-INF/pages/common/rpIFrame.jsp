@@ -5,6 +5,7 @@
 <head>
     <title>OpenID Connect Session Management RP IFrame</title>
     <%
+        System.out.println("=============INSIDE IFrame===============:");
         UserSessionDetailDTO userSessionDetailDTO=(UserSessionDetailDTO)request.getSession().getAttribute(SSOClientConstants.SSO_SESSION_OBJ_KEY);
         String iframeURL =null;
         System.out.println("CID: "+ userSessionDetailDTO.getCid());

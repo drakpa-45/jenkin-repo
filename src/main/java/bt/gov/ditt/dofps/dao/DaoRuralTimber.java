@@ -630,5 +630,4 @@ public class DaoRuralTimber extends BaseDao implements IDaoRuralTimber {
         }
         return null;
     }
-
 }

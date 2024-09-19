@@ -4,18 +4,20 @@ import bt.gov.ditt.dofps.certification.PrintPDFUtility;
 import bt.gov.ditt.dofps.common.ResponseMessage;
 import bt.gov.ditt.dofps.dto.*;
 import bt.gov.ditt.dofps.services.*;
+import net.minidev.json.JSONObject;
+import net.minidev.json.JSONValue;
 import net.sf.jasperreports.engine.JRExporterParameter;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.export.JRPdfExporter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
@@ -25,7 +27,9 @@ import java.io.File;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by deepa on 7/7/2022.
@@ -52,51 +56,16 @@ public class ControllerCitizen {
     @Autowired
     IServiceWoodPole serviceWoodPole;
 
+    public Map<String, SseEmitter> emitters = new HashMap<>();
+
     @RequestMapping(method = RequestMethod.GET)
     public String citizenDashboad(ModelMap model,HttpServletRequest request) {
-       /* StringBuilder stringBuilder = new StringBuilder();
+        StringBuilder stringBuilder = new StringBuilder();
         HttpSession session = request.getSession();
-
-        //tokenService.generateBasicToken();
-
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-
-        String encodedPassword = passwordEncoder.encode("password");
-
-        //if session is active, then redirect to landing page.
-     *//*   if(session.setAttribute("userdetail") != null) {
-
-            System.out.println("@@@@@ Session is active redirecting to landing page directly :====== " + user.getUserName());
-
-            return "redirect:logInLandingPageActive.html";
-        }*//*
-        ResourceBundle resourceBundle = ResourceBundle.getBundle("wsEndPointURL_en_US");
-        String dittSsoBaseUriDash =resourceBundle.getString("ditt.sso.base.uri");
-        String ssoAuthorizeEndPoint =resourceBundle.getString("ditt.sso.authorize.endpoint");
-        String consumerKey =resourceBundle.getString("CONSUMER.KEY");
-        String scope =resourceBundle.getString("ditt.sso.token.scope");
-        String redirectUri =resourceBundle.getString("dofps.login.redirect_uri");
-
-
-        stringBuilder.append(dittSsoBaseUriDash);
-        stringBuilder.append(ssoAuthorizeEndPoint);
-        stringBuilder.append("?response_type=code&client_id=" + consumerKey);
-        stringBuilder.append("&scope=" +scope);
-        stringBuilder.append("&redirect_uri=" + redirectUri);
-
-        byte[] bytes = stringBuilder.toString().getBytes(StandardCharsets.UTF_8);
-        String utf8EncodedString = new String(bytes, StandardCharsets.UTF_8);
-
-        model.addAttribute("authorizeUri", stringBuilder.toString());
-        model.addAttribute("authorizeUriUtf8", utf8EncodedString);
-
-        System.out.println("@@@@@@ sso login uri :=====" + utf8EncodedString);*/
-
-        //model.addAttribute("user", new User());
-
-        return "/common/blank";
-       // return "/citizen/ruralTimberPermit";
+       // return "/common/blank";
+       return "/citizen/ruralTimberPermit";
     }
+
 
     @ResponseBody
     @RequestMapping(value = "/passwordLessLogin", method = RequestMethod.GET)
@@ -106,76 +75,46 @@ public class ControllerCitizen {
         return ndiDTO;
     }
 
- /*   @ResponseBody
-    @RequestMapping(value = "/subscribe", method = RequestMethod.GET)
-    public SseEmitter subscribe(String threadId) throws IOException, InterruptedException {
-        return serviceNDI.subscribe(threadId);
-    }
-*/
     @RequestMapping(value = "/loginDashboard",method = RequestMethod.GET)
     public String loginDashboard(Model model, HttpSession session,HttpServletResponse response,HttpServletRequest request) {
-       /* StringBuilder stringBuilder = new StringBuilder();
-        ObjectMapper objectMapper = new ObjectMapper();
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        SsoPayload ssoPayload = null;
-        JsonNode jsonNode = null;
-
-        jsonNode = apiService.getSsoToken(request, response);
-
-        System.out.println("@@@@@@ settings authentication details ");
-
-        try {
-            ssoPayload = objectMapper.readValue(jsonNode.toString(), SsoPayload.class);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        //extracting user info from the id_token of the SSO Token payload
-        UserRolePrivilegeDTO userRolePrivilegeDTO = new UserRolePrivilegeDTO();
-
-        System.out.println("@@@@@@ ssoPayload.getId_token() ########333" + ssoPayload.getId_token());
-        DecodedJWT jwt = JWT.decode(ssoPayload.getId_token());
-        userRolePrivilegeDTO.setFullName(jwt.getClaim("username").asString());
-        userRolePrivilegeDTO.setMobileNo(jwt.getClaim("mobileNo").asString());
-        userRolePrivilegeDTO.setEmailId(jwt.getClaim("http://wso2.org/claims/emailaddress").asString());
-
-        //setting the token details in the session
-        session.setAttribute("sso_payload", ssoPayload);
-        session.setAttribute("access_token", ssoPayload.getAccess_token());
-        session.setAttribute("id_token", ssoPayload.getId_token());
-        session.setAttribute("refresh_token", ssoPayload.getRefresh_token());
-
-        session.setAttribute("token_exp", ssoPayload.getExpires_in());
-
-        session.setAttribute("userdetail", userRolePrivilegeDTO);
-        model.addAttribute("userdetail", userRolePrivilegeDTO);
-
-        ResourceBundle resourceBundle = ResourceBundle.getBundle("wsEndPointURL_en_US");
-        String dittSsoBaseUri =resourceBundle.getString("ditt.sso.base.uri");
-        String ssoLogoutEndpoint =resourceBundle.getString("ditt.sso.logout.endpoint");
-        String logoutUri =resourceBundle.getString("dofps.logout.log_uri");
-
-        //for SSO logout uri
-        stringBuilder.append(dittSsoBaseUri);
-        stringBuilder.append(ssoLogoutEndpoint);
-        stringBuilder.append("?post_logout_redirect_uri=" + logoutUri);
-        stringBuilder.append("&id_token_hint=" + ssoPayload.getId_token());
-
-        model.addAttribute("ssoLogoutUri", stringBuilder.toString());
-
-       System.out.println("@@@@@ logout url :====== " + stringBuilder.toString());*/
-
         return "/citizen/ruralTimberPermit";
     }
 
-    @RequestMapping("/logout")
-    public String customLogut(Model models, HttpServletRequest request, HttpSession session) {
+    @RequestMapping(value = "/ndiLandingPage.html", method = RequestMethod.POST)
+    public ResponseEntity ndiLandingPage(@RequestBody UserRolePrivilegeDTO dto,HttpSession session) {
+        if (dto != null) {
+            // For example:
+             session.setAttribute("userdetail", dto);
+            // Return success response
+            return new ResponseEntity<>("Success", HttpStatus.OK);
+        } else {
+            // If DTO is null, return bad request response
+           return new ResponseEntity<>("Invalid data received", HttpStatus.BAD_REQUEST);
+        }
+    }
+    @RequestMapping(value = "/redirect.html", method = RequestMethod.GET)
+    public String ndiLandingPageOpen(Model model, HttpSession session) {
+        // Retrieve DTO object from session
+        UserRolePrivilegeDTO dto = (UserRolePrivilegeDTO) session.getAttribute("userdetail");
+        if (dto != null) {
+            // Retrieve data from DTO
+            session.setAttribute("userdetail", dto);
+            return "/citizen/ruralTimberPermit";
+        } else {
+            // Handle case where DTO is not found in session
+            System.out.println("DTO not found in session.");
+            return ""; // Redirect to home page or appropriate error page
+        }
+    }
+
+    @RequestMapping(value="/logout",method = RequestMethod.GET)
+    public String logout(Model models, HttpServletRequest request, HttpSession session) {
         //clearing sessions
         session = request.getSession(false);
         if (session != null) {
             session.invalidate();
         }
-        return "redirect:/";
+        return "redirect:http://brtp.citizenservices.gov.bt/";
     }
 
     @RequestMapping(value = "public/initiate/citizenDashboard", method = RequestMethod.GET)

@@ -13,7 +13,6 @@
     </properties>
 
     <dependencies>
-
         <dependency>
             <groupId>axis</groupId>
             <artifactId>axis</artifactId>
@@ -450,7 +449,6 @@
         <!--CAS dependency-->
 
         <!-- JBoss integration is provided by this dependency-->
-
         <!--<dependency>
             <groupId>org.jasig.cas.client</groupId>
             <artifactId>cas-client-integration-jboss</artifactId>

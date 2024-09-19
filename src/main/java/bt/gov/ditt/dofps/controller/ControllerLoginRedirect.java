@@ -55,7 +55,11 @@ public class ControllerLoginRedirect {
                 } else if (request.getParameter("userId") != null) {
                     uid = (String) request.getParameter("userId");
                 }
+
+                System.out.println("------- request.getUserPrincipal().getName() -------"+request.getUserPrincipal().getName());
+
                 System.out.println("------- before userdetail -------");
+
                 String roleId = request.getParameter("roleId");
                 session.setAttribute("userdetail",null);
 
@@ -73,6 +77,7 @@ public class ControllerLoginRedirect {
                         InvokeWS invokeWS = null;
                         System.out.println("--------before invokeWS call ------");
                         invokeWS = new InvokeWS(userRolePrivilegeEndPointUrl);
+
                         userRolePrivilegeDol = invokeWS.populateUserRolePrivilegeHierarchy(userRolePrivilegeDol, roleId, "M_MOA.D_DoFPS");
                         UserRolePrivilegeHierarchyObj userRolePrivilegeObj = new UserRolePrivilegeHierarchyObj();
 
@@ -205,7 +210,7 @@ public class ControllerLoginRedirect {
                             currentRole = roles1.get(0);
                             dto.setCurrentRole(currentRole);
                         }
-
+                        System.out.println("--------ROLE ID  ------"+dto.getCurrentRole().getRoleId());
                         String user = dto.getCurrentRole().getRoleName();
                         for (int n = 0; n < dto.getJurisdictions().length; n++) {
                             LocationId = dto.getJurisdictions()[n].getLocationID();
@@ -218,20 +223,15 @@ public class ControllerLoginRedirect {
 
                       /*  if(user.equalsIgnoreCase("CC Operator")){
                             return "common/dashBoard";
-                        }else*/ if(user.equalsIgnoreCase("Gewog") || user.equalsIgnoreCase("CFO/PM") || user.equalsIgnoreCase("Gup")  || user.equalsIgnoreCase("Range Officer")){
+                        }else*/ if(user.equalsIgnoreCase("Gewog") || user.equalsIgnoreCase("CFO/PM") || user.equalsIgnoreCase("LG_ROLE") || user.equalsIgnoreCase("Gup")  || user.equalsIgnoreCase("Range Officer")){
                             request.setAttribute("My_Task_List", serviceCommon.populateTaskListforSelectedServices(request, "5"));
                             return "admin/dashboard";
                         }/*else if(user.equalsIgnoreCase("CFO/PM")){
                             request.setAttribute("My_Task_List", serviceCommon.populateTaskListforSelectedServices(request, "5"));
                             return "gewog/dashboard";
                         }*/else{
-                            if (dto.getCurrentRole().getRoleName() != "" && dto.getJurisdictions()[0].getLocationID() != "") {
-                               request.setAttribute("GroupTaskDealing", serviceCommon.getGroupTaskDealing(request, userID, LocationId, user));
-                               request.setAttribute("PersonalTaskDealing", serviceCommon.getPersonalTaskDealing(request, userID, user, LocationId));
-                               request.setAttribute("GroupTaskPRL", serviceCommon.getGroupTaskRangePRL(request, userID, LocationId, user));
-                               request.setAttribute("PersonalTaskPRL", serviceCommon.getPersonalTaskRangePRL(request, userID, LocationId, user));
-                               return "common/dashBoard";
-                           }
+                            model.addAttribute("acknowledgement_message","Your are not allow to access with this role:" + roleId);
+                               return "common/ackPage";
                         }
 //                        if (!user.equalsIgnoreCase("CC Operator")) {
 //                            if (dto.getCurrentRole().getRoleName() != "" && dto.getJurisdictions()[0].getLocationID() != "") {

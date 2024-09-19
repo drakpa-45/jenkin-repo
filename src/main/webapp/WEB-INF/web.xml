@@ -76,7 +76,7 @@
     </listener>
 
     <session-config>
-        <session-timeout>1</session-timeout>
+        <session-timeout>0</session-timeout>
     </session-config>
 
     <!--   <session-config>
@@ -95,8 +95,7 @@
        </servlet> -->
 
     <!-- SSO-->
-<!--
-     <filter>
+    <!-- <filter>
          <filter-name>ssofilter</filter-name>
          <filter-class>bt.gov.ditt.sso.client.SSOServletFilter</filter-class>
          <init-param>
@@ -111,7 +110,7 @@
          <init-param>
              <param-name>RESPONSE_URL</param-name>
              &lt;!&ndash;<param-value>https://www.citizenservices.gov.bt/dofps/sso/acs</param-value>&ndash;&gt;
-             <param-value>http://brtp.citizenservices.gov.bt/loginDashboard/</param-value>
+             <param-value>https://brtp.citizenservices.gov.bt/dofps/loginDashboard</param-value>
          </init-param>
 
          <init-param>
@@ -137,7 +136,7 @@
          <init-param>
              <param-name>LOGOUT_CALLBACK</param-name>
              &lt;!&ndash;<param-value>https://www.citizenservices.gov.bt/dofps/sso/oidclogout</param-value>&ndash;&gt;
-             <param-value>http://brtp.citizenservices.gov.bt/loginDashboard</param-value>
+             <param-value>https://brtp.citizenservices.gov.bt/dofps/logout</param-value>
          </init-param>
 
          <init-param>
@@ -150,7 +149,6 @@
              <param-name>IDTOKEN_KEYSTORE</param-name>
              &lt;!&ndash;<param-value>/opt/jdk1.8.0_77/jre/lib/security/cacerts</param-value>&ndash;&gt;
              <param-value>/usr/lib/jvm/java-8-openjdk-amd64/jre/lib/security/cacerts</param-value>
-
          </init-param>
 
          <init-param>
@@ -197,8 +195,8 @@
      </init-param>
      <init-param>
          <param-name>serverName</param-name>
-         <!--<param-value>http://localhost:8083/</param-value>-->
-          <param-value>http://brtp.citizenservices.gov.bt/</param-value>
+         <param-value>http://localhost:8082/</param-value>
+          <!--<param-value>https://brtp.citizenservices.gov.bt/</param-value>-->
     <!--<param-value>https://www.citizenservices.gov.bt/</param-value>-->
      </init-param>
      <init-param>
@@ -231,8 +229,8 @@
      </init-param>
      <init-param>
          <param-name>serverName</param-name>
-         <!--<param-value>http://localhost:8083/</param-value>-->
-         <param-value>http://brtp.citizenservices.gov.bt/</param-value>
+         <param-value>http://localhost:8082/</param-value>
+         <!--<param-value>https://brtp.citizenservices.gov.bt/</param-value>-->
      </init-param>
      <init-param>
          <param-name>allowAnyProxy</param-name>
@@ -276,3 +274,5 @@
 </listener>
     <!-- ######################    END OF CAS ENTRIES  ######################    -->
 </web-app>
+
+

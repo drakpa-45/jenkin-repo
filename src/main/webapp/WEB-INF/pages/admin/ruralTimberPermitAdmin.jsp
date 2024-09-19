@@ -558,7 +558,7 @@
 
                         $('#hoh').val(res.hoh);
                         var hoh = res.hoh;
-                        if(hoh=="NO") {
+                       /* if(hoh=="NO") {
                             $("#check_hoh").modal('show');
                             $("#hoh_check").show();
                         }
@@ -572,7 +572,7 @@
                             $("#check_hoh").modal('show');
                             $("#availedRTP").show();
                             $("#availedServicesErr").html(res.actor_Name);
-                        }
+                        }*/
                         getParkDropdown(res.dzongkhag_Id,'parkList');
                         getConstructionLoc(res.gewog_Id,'villegeList');
                     }else{

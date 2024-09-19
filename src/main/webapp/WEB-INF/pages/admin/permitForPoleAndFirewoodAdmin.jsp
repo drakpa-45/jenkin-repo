@@ -414,7 +414,7 @@
                         $('#gewogId').val(res.gewog_Id);
 
                         $('#hoh').val(res.hoh);
-                      /*  var hoh = res.hoh;
+                        var hoh = res.hoh;
                         if (hoh == "NO") {
                             $("#check_hoh").modal('show');
                             $("#hoh_check").show();
@@ -432,7 +432,7 @@
                             $("#availedRTP").show();
                             $("#availedServicesErr").html(res.actor_Name);
                             $('#cid').val('');
-                        }*/
+                        }
                         getParkDropdown(res.dzongkhag_Id,'parkList');
                     }else{
                         $('#cid').val("").focus();
@@ -778,14 +778,14 @@
             $('#confirmationModel').modal('hide');
             $.ajax({
                 type : "POST",
-                url : '${pageContext.request.contextPath}/public/loadpagetoemptylayout/saveWoodandPoles',
+                url : '${pageContext.request.contextPath}/gewog/loginMain/saveWoodandPoles',
                 data: $('#personalForm').serialize(),
                 cache : false,
                 success : function(res) {
                     // $('#btn_submit_online_timber').prop('disabled',true);
                     //  $("#messageDiv").html(responseText);
                     if(res.status==1){
-                        successMsg(res.text, '${pageContext.request.contextPath}/');
+                        successMsg(res.text, '${pageContext.request.contextPath}/loginMain/');
                     }else{
                         warningMsg(res.text);
                     }

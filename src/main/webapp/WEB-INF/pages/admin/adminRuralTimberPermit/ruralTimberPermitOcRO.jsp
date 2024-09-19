@@ -307,9 +307,8 @@
                                           <%}%>
                                           <th class="text-white" style="width: 2%">Quantity Approved <span class="text-danger"></span></th>
                                           <th class="text-white" style="width: 2%">Unit <span class="text-danger"></span></th>
-                                          <th class="text-white" style="width: 3%">Royalty Rate(NU)</th>
-                                          <th class="text-white" style="width: 3%">Royalty Amount(NU)</th>
-                                          <%--<th class="text-white" style="width: 3%">Total Amount(NU)</th>--%>
+                                          <%--<th class="text-white" style="width: 3%">Royalty Rate(NU)</th>
+                                          <th class="text-white" style="width: 3%">Royalty Amount(NU)</th>--%>
                                       </tr>
                                       </thead>
                                       <tbody>
@@ -326,15 +325,14 @@
                                           <td><input class="form-control" type="number" id="allot_Quantity_<%=a%>" name="timberDetails[<%=a%>].allot_Quantity" value="<%=App_Details.getAllot_Quantity()%>" onchange="calculateRoyalty(this.value,<%=a%>,<%=product.size()%>)" value="0" min="1" onclick="Errors('errmsg')"/>
                                               &nbsp;<span id="errmsg<%=a%>" class="text-danger"></span></td>
                                           <td><input type="hidden" id="unit_<%=a%>" name="timberDetails[<%=a%>].unit" value="<%=product.get(a).getUnit()%>"><%=product.get(a).getUnit()%></td>
-                                          <td><input type="hidden" id="rate_<%=a%>" name="timberDetails[<%=a%>].rate" value="<%=product.get(a).getRate()%>"><%=product.get(a).getRate()%></td>
-                                          <td><input type="number" class="form-control" id="net_Royalty_<%=a%>" name="timberDetails[<%=a%>].royalty_Rate" value="0" readonly/></td>
-                                         <%-- <td><input type="number" class="form-control" id="total_Royalty_<%=a%>" name="timberDetails[<%=a%>].total_Royalty"  value="0"  readonly/></td>--%>
+                                          <%--<td><input type="hidden" id="rate_<%=a%>" name="timberDetails[<%=a%>].rate" value="<%=product.get(a).getRate()%>"><%=product.get(a).getRate()%></td>--%>
+                                          <%--<td><input type="number" class="form-control" id="net_Royalty_<%=a%>" name="timberDetails[<%=a%>].royalty_Rate" value="0" readonly/></td>--%>
                                       </tr>
                                       <%}%>
-                                      <tr>
+                                     <%-- <tr>
                                           <td colspan="6">Total Amount = royalty amount + Service fee (10)</td>
                                           <td colspan="6"><input type="number" class="form-control" id="total_Royalty" name="timberDetails[0].total_Royalty"  value="0"  readonly/></td>
-                                      </tr>
+                                      </tr>--%>
                                       </tbody>
                                   </table>
                               </div>
@@ -656,8 +654,6 @@
         }
 
         function ocRangeApprove(appNo) {
-            alert();
-            debugger;
             var remarks = $('#remarks').val();
             var statusId = $('#statusId').val();
             var productName =$("#productName").val();
